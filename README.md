@@ -1,5 +1,5 @@
 # Description 
-This script calculate mean values and standart deviation for each sample and condition
+This script calculate mean value and standart deviation for each sample and condition
 Then it calculate the difference to the control condition for each sample
 and plot the results
 
@@ -28,4 +28,4 @@ python graph_deltaCT.py "file path" "control condition" ,,, "other conditions"
 
 ## output:  
 for each sample (collected by "sample Name" column) 
-the script ouput a graph with a difference value for each condition to control condition
+the script ouput a graph as png file
