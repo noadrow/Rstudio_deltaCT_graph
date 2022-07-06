@@ -12,6 +12,9 @@ import sys
 # the rest of the argument are all the other conditions
 # NOTE: It's important to keep the notation of condition the same as in the "Target name" column
 
+
+#ADD: Undetermined cleanup
+
 def mean_std_cal(filepath):
        file_df = pd.read_csv(filepath, sep=",", header=0)
        samples = file_df["Sample Name"].unique()
@@ -21,10 +24,10 @@ def mean_std_cal(filepath):
 
        for Sample in samples:
               for Condition in Condition_Name:
-                     mean = file_df.loc[(file_df["Sample Name"] == Sample)
-                                        & (file_df["Target Name"] == Condition)]["Cт"].mean()
-                     std = file_df.loc[(file_df["Sample Name"] == Sample)
-                                       & (file_df["Target Name"] == Condition)]["Cт"].std()
+                     mean = pd.to_numeric(file_df.loc[(file_df["Sample Name"] == Sample)
+                                        & (file_df["Target Name"] == Condition)]["Cт"]).mean()
+                     std = pd.to_numeric(file_df.loc[(file_df["Sample Name"] == Sample)
+                                       & (file_df["Target Name"] == Condition)]["Cт"]).std()
 
                      temp_dict = {
                             "sample": Sample,
@@ -52,17 +55,19 @@ def diff_cal(cal_df,conditions,samples):
                             conditionValue_std = cal_df.loc[(cal_df["sample"] == sample) &
                                                             (cal_df["condition"] == condition)]['std']
 
-                            diff_mean = float(conditionValue_mean) - float(Csample_mean)
-                            diff_std = float(Csample_std) + float(conditionValue_std)
 
-                            temp_dict = {
-                                   "sample": sample,
-                                   "condition": condition,
-                                   "diff_mean": diff_mean,
-                                   "diff_std": diff_std
-                            }
+                            diff_mean = conditionValue_mean.values - Csample_mean.values
+                            diff_std = Csample_std.values + conditionValue_std.values
 
-                            results_df = results_df.append([temp_dict], ignore_index=True)
+                            if (len(diff_mean)==1 & len(diff_std)==1):
+                                   temp_dict = {
+                                          "sample": sample,
+                                          "condition": condition,
+                                          "diff_mean": diff_mean[0],
+                                          "diff_std": diff_std[0]
+                                   }
+                                   results_df = results_df.append([temp_dict], ignore_index=True)
+
        return results_df
 
 def plot_CT(samples,conditions,results_df):
@@ -91,7 +96,7 @@ def plot_CT(samples,conditions,results_df):
 
               # Save the figure and show
               plt.tight_layout()
-              plt.savefig(sample+'_bar_plot_with_error_bars.png')
+              plt.savefig(sample.replace("/","_")+"_bar_plot_with_error_bars'.png")
               plt.show()
 
 
