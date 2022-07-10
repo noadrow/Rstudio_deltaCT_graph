@@ -5,9 +5,9 @@ and plot the results
 
 ## Required:
 1. python3
-2. python pacakes: numpy, mathplotlib, pandas
+2. python packages: numpy, mathplotlib, pandas
 
-# input 
+# Input 
 The first argument to run the script is the file location\name
 the second argument is the control condition name
 the rest of the argument are all the other conditions
